@@ -1,0 +1,126 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+ 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>file:${CATALINA_BASE}/AppData/employee-importer-commonADP.properties</value>
+				<value>file:${CATALINA_BASE}/AppData/employee-importer-secureADP.properties</value>
+				<value>file:${CATALINA_BASE}/AppData/employee-importer-unsecureADP.properties</value>
+				<value>file:${CATALINA_BASE}/AppData/dm-rd-job-codesADP.properties</value>
+				<value>file:${CATALINA_BASE}/AppData/posttoadp.ldap-secure.properties</value>
+				<value>file:${CATALINA_BASE}/AppData/posttoadp.ldap-unsecure.properties</value>
+				<value>file:${CATALINA_BASE}/AppData/posttoadp.service.properties</value>
+				<value>file:${CATALINA_BASE}/AppData/department-domain-mapping.properties</value>
+				<value>file:${CATALINA_BASE}/AppData/ad-common.properties</value>
+				<value>file:${CATALINA_BASE}/AppData/ad-secure.properties</value>
+				<value>file:${CATALINA_BASE}/AppData/ad-unsecure.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<context:component-scan base-package="com.rac.iam.okta.adp.csv.employee.importer" />
+	<context:component-scan base-package="com.rac.postToADP" />
+	<context:component-scan base-package="com.rac.hremp" />
+	<context:component-scan base-package="com.rac.okta" />
+	
+	<bean id="dirContextValidatorLDAP"
+		class="org.springframework.ldap.pool.validation.DefaultDirContextValidator" />
+	
+	<bean id="contextSourceTargetLDAP"
+		class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+		<constructor-arg value="${ldap.adam.server.connectionstring}" />
+		<property name="userDn" value="${ldap.adam.serviceaccountname}" />
+		<property name="password" value="${ldap.adam.serviceaccountpassword}" />
+		<property name="baseEnvironmentProperties">
+			<map>
+				<entry>
+					<key>
+						<value>java.naming.referral</value>
+					</key>
+					<value>follow</value>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="contextSourceLDAP"
+		class="org.springframework.ldap.pool.factory.PoolingContextSource">
+		<property name="contextSource" ref="contextSourceTargetLDAP" />
+		<property name="dirContextValidator" ref="dirContextValidatorLDAP" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testWhileIdle" value="true" />
+	</bean>
+	
+	<bean id="ldapTemplateLDAP" class="org.springframework.ldap.core.LdapTemplate">
+		<constructor-arg ref="contextSourceLDAP" />
+	</bean>
+
+	<bean id="service" class="com.rac.postToADP.config.LdapTemplateConfig">
+		<property name="ldapTemplateLDAP" ref="ldapTemplateLDAP" />
+		<property name="usersOU" value="${adam.users.ou}" />
+		<property name="storesOU" value="${adam.stores.ou}" />
+		<property name="storeGroupsOU" value="${adam.stores.groups.ou}" />
+		<property name="baseDN" value="${ldap.adam.baseDN}" />
+		<property name="employeeGroupStoreManagerOU" value="${ldap.adam.employee.group.storemanager}" />
+		<property name="employeeGroupHomeOfficeViewerOU" value="${ldap.adam.employee.group.homeofficeviewer}" />
+		<property name="employeeGroupFieldManagerOU" value="${ldap.adam.employee.group.fieldmanager}" />
+		<property name="employeeGroupStoreEmployeeOU" value="${ldap.adam.employee.group.storeemployee}" />
+		<property name="employeeGroupHomeOfficeEmployeeOU" value="${ldap.adam.employee.group.homeofficeemployee}" />
+		<property name="employeeGroupNet_Str_DmOU" value="${ldap.adam.employee.group.net_str_dm}" />
+		<property name="employeeGroupNet_Str_RdOU" value="${ldap.adam.employee.group.net_str_rd}" />
+		<property name="storeGroupNet_Get_It_NowOU" value="${ldap.adam.store.group.net_get_it_now}" />
+		<property name="storeGroupNet_Home_ChoiceOU" value="${ldap.adam.store.group.net_home_choice}" />
+		<property name="storeGroupNet_Home_Choice_IlOU" value="${ldap.adam.store.group.net_home_choice_il}" />
+		<property name="storeGroupNet_Rac_AcceptanceOU" value="${ldap.adam.store.group.net_rac_acceptance}" />
+		<property name="storeGroupNet_Rac_CanadaOU" value="${ldap.adam.store.group.net_rac_canada}" />
+		<property name="storeGroupNet_Rac_RtoOU" value="${ldap.adam.store.group.net_rac_rto}" />
+		<property name="storeGroupNet_Rac_MexicoOU" value="${ldap.adam.store.group.net_rac_mexico}" />
+		<property name="storeGroupNet_Rto_PrOU" value="${ldap.adam.store.group.net_rto_pr}" />
+		<property name="storeGroupNet_Str_NpsOU" value="${ldap.adam.store.group.net_str_nps}" />
+		<property name="storeGroupNet_Str_PrOU" value="${ldap.adam.store.group.net_str_pr}" />
+	</bean>
+	
+	<bean id="dirContextValidatorAD"
+         class="org.springframework.ldap.pool.validation.DefaultDirContextValidator" />
+
+	<bean id="contextSourceTargetAD"
+		class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+		<constructor-arg value="${ad.server}" />
+		<property name="userDn" value="${ad.serviceaccountname}" />
+		<property name="password" value="${ad.serviceaccountpassword}" />
+		<property name="base" value="${ad.basedn}" />
+		<property name="baseEnvironmentProperties">
+			<map>
+				<entry>
+					<key>
+						<value>java.naming.referral</value>
+					</key>
+					<value>follow</value>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="contextSourceAD" class="org.springframework.ldap.pool.factory.PoolingContextSource">
+      <property name="contextSource" ref="contextSourceTargetAD" />
+      <property name="dirContextValidator" ref="dirContextValidatorAD" />
+      <property name="minIdle" value="2" />
+      <property name="maxActive" value="12" />
+      <property name="maxWait" value="60000" />
+      <property name="testOnBorrow" value="true" />
+      <property name="testWhileIdle" value="true" />
+   </bean>
+
+	<bean id="ldapTemplateAD" class="org.springframework.ldap.core.LdapTemplate">
+		<constructor-arg ref="contextSourceAD" />
+	</bean>
+
+</beans>

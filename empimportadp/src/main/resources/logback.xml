@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false">
+
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<Target>System.out</Target>
+		<encoder>
+			<pattern>[ %date{dd-MMM-yyyy HH:mm:ss.SSS} ] [%level] - %message%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="ERR_RECORDS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${CATALINA_BASE}/logs/errored-emp-records.log</File>
+		<encoder>
+			<pattern>[ %date{dd-MMM-yyyy HH:mm:ss.SSS} ] [%level] - %message%n
+			</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	      <!-- daily rollover -->
+	      <fileNamePattern>${CATALINA_BASE}/logs/errored-emp-records.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+	      <timeBasedFileNamingAndTriggeringPolicy
+	          class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+	        <maxFileSize>5MB</maxFileSize>
+	      </timeBasedFileNamingAndTriggeringPolicy>
+	      <maxHistory>365</maxHistory>
+	    </rollingPolicy>
+		<!--rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<maxIndex>5</maxIndex>
+			<FileNamePattern>${CATALINA_BASE}/logs/errored-emp-records.log.%i
+			</FileNamePattern>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>20MB</maxFileSize>
+		</triggeringPolicy-->
+	</appender>
+
+	<appender name="IMPORT_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${CATALINA_BASE}/logs/employee-importer.log</File>
+		<encoder>
+			<pattern>[ %date{dd-MMM-yyyy HH:mm:ss.SSS} ] [%level] - %message%n</pattern>
+		</encoder>
+		<!-- 
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<maxIndex>5</maxIndex>
+			<FileNamePattern>${CATALINA_BASE}/logs/employee-importer.log.%i
+			</FileNamePattern>
+		</rollingPolicy> -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	      <!-- daily rollover -->
+	      <fileNamePattern>${CATALINA_BASE}/logs/employee-importer.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+	      <timeBasedFileNamingAndTriggeringPolicy
+	          class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+	        <maxFileSize>5MB</maxFileSize>
+	      </timeBasedFileNamingAndTriggeringPolicy>
+	      <maxHistory>365</maxHistory>
+	    </rollingPolicy>
+	    <!-- 
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>20MB</maxFileSize>
+		</triggeringPolicy> -->
+	</appender>
+	
+	<appender name="LDAP_SYNC_ERRORS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${CATALINA_BASE}/logs/errored-ldap-email-records.log</File>
+		<encoder>
+			<pattern>[ %date{dd-MMM-yyyy HH:mm:ss.SSS} ] [%level] - %message%n
+			</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	      <!-- daily rollover -->
+	      <fileNamePattern>${CATALINA_BASE}/logs/errored-ldap-email-records.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+	      <timeBasedFileNamingAndTriggeringPolicy
+	          class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+	        <maxFileSize>1MB</maxFileSize>
+	      </timeBasedFileNamingAndTriggeringPolicy>
+	      <maxHistory>5</maxHistory>
+	    </rollingPolicy>
+		<!--rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<maxIndex>5</maxIndex>
+			<FileNamePattern>${CATALINA_BASE}/logs/errored-emp-records.log.%i
+			</FileNamePattern>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>20MB</maxFileSize>
+		</triggeringPolicy-->
+	</appender>
+
+	<appender name="LDAP_SYNC_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${CATALINA_BASE}/logs/employee-ldap-email.log</File>
+		<encoder>
+			<pattern>[ %date{dd-MMM-yyyy HH:mm:ss.SSS} ] [%level] - %message%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	      <!-- daily rollover -->
+	      <fileNamePattern>${CATALINA_BASE}/logs/employee-ldap-email.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+	      <timeBasedFileNamingAndTriggeringPolicy
+	          class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+	        <maxFileSize>1MB</maxFileSize>
+	      </timeBasedFileNamingAndTriggeringPolicy>
+	      <maxHistory>5</maxHistory>
+	    </rollingPolicy>
+	</appender>
+	
+	<appender name="AD_SERVICE_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${CATALINA_BASE}/logs/employee-ad-service.log</File>
+		<encoder>
+			<pattern>[ %date{dd-MMM-yyyy HH:mm:ss.SSS} ] [%level] - %message%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	      <!-- daily rollover -->
+	      <fileNamePattern>${CATALINA_BASE}/logs/employee-ad-service.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+	      <timeBasedFileNamingAndTriggeringPolicy
+	          class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+	        <maxFileSize>1MB</maxFileSize>
+	      </timeBasedFileNamingAndTriggeringPolicy>
+	      <maxHistory>5</maxHistory>
+	    </rollingPolicy>
+	</appender>
+	
+	<appender name="AD_SERVICE_ERRORS_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${CATALINA_BASE}/logs/employee-ad-service-errors.log</File>
+		<encoder>
+			<pattern>[ %date{dd-MMM-yyyy HH:mm:ss.SSS} ] [%level] - %message%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	      <!-- daily rollover -->
+	      <fileNamePattern>${CATALINA_BASE}/logs/employee-ad-service-errors.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+	      <timeBasedFileNamingAndTriggeringPolicy
+	          class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+	        <maxFileSize>1MB</maxFileSize>
+	      </timeBasedFileNamingAndTriggeringPolicy>
+	      <maxHistory>5</maxHistory>
+	    </rollingPolicy>
+	</appender>
+	
+	<appender name="OKTA_SERVICE_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${CATALINA_BASE}/logs/okta-access-service.log</File>
+		<encoder>
+			<pattern>[ %date{dd-MMM-yyyy HH:mm:ss.SSS} ] [%level] - %message%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	      <!-- daily rollover -->
+	      <fileNamePattern>${CATALINA_BASE}/logs/okta-access-service.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+	      <timeBasedFileNamingAndTriggeringPolicy
+	          class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+	        <maxFileSize>1MB</maxFileSize>
+	      </timeBasedFileNamingAndTriggeringPolicy>
+	      <maxHistory>5</maxHistory>
+	    </rollingPolicy>
+	</appender>
+	
+	<appender name="OKTA_SERVICE_ERRORS_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${CATALINA_BASE}/logs/okta-access-service-errors.log</File>
+		<encoder>
+			<pattern>[ %date{dd-MMM-yyyy HH:mm:ss.SSS} ] [%level] - %message%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	      <!-- daily rollover -->
+	      <fileNamePattern>${CATALINA_BASE}/logs/okta-access-service-errors.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+	      <timeBasedFileNamingAndTriggeringPolicy
+	          class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+	        <maxFileSize>1MB</maxFileSize>
+	      </timeBasedFileNamingAndTriggeringPolicy>
+	      <maxHistory>5</maxHistory>
+	    </rollingPolicy>
+	</appender>
+
+	<logger name="import_logfile" level="DEBUG">
+		<appender-ref ref="IMPORT_LOG_FILE" />
+	</logger>
+	<logger name="errors" level="DEBUG" additivity="false">
+		<appender-ref ref="ERR_RECORDS_FILE" />
+	</logger>
+	<logger name="ldap_sync_errors" level="DEBUG">
+		<appender-ref ref="LDAP_SYNC_ERRORS" />
+	</logger>
+	<logger name="ldap_sync_log" level="DEBUG">
+		<appender-ref ref="LDAP_SYNC_LOG" />
+	</logger>
+	<logger name="ad_service_log" level="DEBUG">
+		<appender-ref ref="AD_SERVICE_LOG" />
+	</logger>
+	<logger name="ad_service_errors_log" level="DEBUG">
+		<appender-ref ref="AD_SERVICE_ERRORS_LOG" />
+	</logger>
+	<logger name="okta_service_log" level="DEBUG">
+		<appender-ref ref="OKTA_SERVICE_LOG" />
+	</logger>
+	<logger name="okta_service_errors_log" level="DEBUG">
+		<appender-ref ref="OKTA_SERVICE_ERRORS_LOG" />
+	</logger>
+
+	<root level="WARN">
+		<appender-ref ref="logfile" />
+		<appender-ref ref="stdout" />
+	</root>
+</configuration>
